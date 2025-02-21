@@ -56,13 +56,17 @@ wss.on('connection', (ws) => {
 
 // 파일 변경 감지 (public 폴더)
 const fs = require('fs');
+let debounceTimer;
 fs.watch('public', { recursive: true }, (eventType, filename) => {
-  console.log(`${filename} 파일이 변경되었습니다. 새로고침...`);
-  wss.clients.forEach(client => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send('reload');
-    }
-  });
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    console.log(`${filename} 파일이 변경되었습니다. 새로고침...`);
+    wss.clients.forEach(client => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send('reload');
+      }
+    });
+  }, 100); // 100ms 동안 추가 이벤트 무시
 });
 
 // 에러 핸들링
