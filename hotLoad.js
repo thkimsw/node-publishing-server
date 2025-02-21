@@ -1,6 +1,6 @@
-window.onload = function() {
+document.addEventListener('DOMContentLoaded', function() {
   // 페이지 로드 시 로그 출력
-  console.log('페이지가 로드되었습니다.');
+  console.log('hot-load페이지가 로드되었습니다.');
   
   // h2 요소 클릭 이벤트는 선택적으로 등록
   const h2Element = document.querySelector('h2');
@@ -16,7 +16,7 @@ window.onload = function() {
 
   // WebSocket 연결 성공 시
   ws.onopen = () => {
-      console.log('WebSocket 연결됨');
+      console.log('hot-load WebSocket 연결됨');
   };
 
   let isIntentionalClosure = false;
@@ -46,4 +46,4 @@ window.onload = function() {
   ws.onerror = (error) => {
       console.error('WebSocket 에러:', error);
   };
-};
+});
