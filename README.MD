@@ -1,65 +1,76 @@
-#외부접속시 방화벽 설정
+# 서버 설정 가이드
 
-#node 설치
-```
+## 방화벽 설정
+외부접속시 방화벽 설정 필요
+
+## Node.js 설치 및 실행
+
+### 1. NVM을 통한 Node 설치
+```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
 ```
 
-#node 설치
-```
-
-#node 종속성 설치
-```
+### 2. 종속성 설치
+```bash
 npm install
 ```
 
-#node 실행(백그라운드드)
-```
+### 3. 서버 실행
+```bash
+# Windows
 npm run dev:windows
+
+# Mac
 npm run dev:mac
-
-#종료 
-windows - 
-1. netstat -ano | findstr :5858 
-2. taskkill /PID {pid} /F
-
-mac - lsof -i :5858
-        - kill -9 {pid}
 ```
-- Local URL: http://localhost:5858 -내부접속 url
-- External URL: http://192.168.0.4:5858 -외부접속 url
 
-#페이지 라우팅 설정
-/src/routes/pageRoutes.js 에
-// 메인 페이지
-페이지 이름을 '/' 로 하면 루트가 됨.
+### 4. 서버 종료 방법
+#### Windows
+```bash
+# 포트 사용 프로세스 확인
+netstat -ano | findstr :5858 
 
-// 메인 페이지
-  router.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, '../../public/pages/search.html'));
-  });
+# 프로세스 종료
+taskkill /PID {pid} /F
+```
 
-//다른페이지지
-  router.get('/repot_view', (req, res) => {
-    res.sendFile(path.join(__dirname, '../../public/pages/repot_view.html'));
+#### Mac
+```bash
+# 포트 사용 프로세스 확인
+lsof -i :5858
+
+# 프로세스 종료
+kill -9 {pid}
+```
+
+## 접속 URL
+- **내부접속**: `http://localhost:5858`
+- **외부접속**: `http://192.168.0.4:5858`
+
+## 페이지 라우팅 설정
+라우팅 설정은 `/src/routes/pageRoutes.js`에서 관리
+
+### 라우팅 예시
+```javascript
+// 메인 페이지 ('/'가 루트 경로)
+router.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../public/pages/search.html'));
 });
 
-페이지별 추가
+// 다른 페이지 예시
+router.get('/repot_view', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../public/pages/repot_view.html'));
+});
+```
 
-#귀찮으면 public 내에 때려넣어도..
+## 파일 구조
+### 정적 파일 위치
+- **HTML**: `/public/pages`
+- **CSS**: `/public/css`
+- **JavaScript**: `/public/js`
 
-#html 파일추가
-/public/pages 에 html 넣기
-
-#css 파일추가
-/public/css 에 css 넣기
-
-#js 파일추가
-/public/js 에 js 넣기
-
-#리소스 경로는
-/page => /public/pages
-/css => /public/css
-/js => /public/js
-
-로 되어 있으므로 css 나 js에서도 절대경로로 사용가능
+### 리소스 접근 경로
+절대경로 사용 가능:
+- `/page` → `/public/pages`
+- `/css` → `/public/css`
+- `/js` → `/public/js`

@@ -4,34 +4,30 @@ const app = express();
 const path = require('path');
 const port = 5858;
 
+// HTML 응답 인터셉트를 위한 미들웨어를 라우트 설정 전에 배치
+app.use((req, res, next) => {
+  const originalSend = res.send;
+  res.send = function(head) {
+    if (typeof head === 'string' && (
+      head.includes('</html>') || 
+      head.includes('</HTML>')
+    )) {
+      head = head.replace(
+        /<\/head>|<\/head>/i,
+        '<script src="/hotLoad.js"></script></head>'
+      );
+    }
+    return originalSend.call(this, head);
+  };
+  next();
+});
+
 // 정적 파일 제공 설정 (public 폴더)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 추가 라우트 파일 임포트 (예: src/routes/pageRoutes.js)
 const pageRoutes = require('./src/routes/pageRoutes');
 app.use('/', pageRoutes);
-
-// HTML 응답 인터셉트를 위한 미들웨어 추가
-app.use((req, res, next) => {
-  // 원래의 send 함수를 저장
-  const originalSend = res.send;
-
-  // send 함수를 재정의
-  res.send = function(body) {
-    // HTML 응답인 경우에만 처리
-    if (typeof body === 'string' && body.includes('</html>')) {
-      // </body> 태그 앞에 hotLoad.js 스크립트 삽입
-      body = body.replace(
-        '</body>',
-        '<script src="/hotLoad.js"></script></body>'
-      );
-    }
-    // 원래의 send 함수 호출
-    return originalSend.call(this, body);
-  };
-
-  next();
-});
 
 // 정적 파일 제공 설정 (hotLoad.js 파일도 제공)
 app.use('/hotLoad.js', express.static(path.join(__dirname, 'hotLoad.js')));

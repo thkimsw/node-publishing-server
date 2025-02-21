@@ -2,10 +2,13 @@ window.onload = function() {
   // 페이지 로드 시 로그 출력
   console.log('페이지가 로드되었습니다.');
   
-  // h2 요소 클릭 시 이벤트 등록
-  document.querySelector('h2').addEventListener('click', function() {
+  // h2 요소 클릭 이벤트는 선택적으로 등록
+  const h2Element = document.querySelector('h2');
+  if (h2Element) {
+    h2Element.addEventListener('click', function() {
       alert('예제 페이지에 오신 것을 환영합니다!');
-  });
+    });
+  }
 
   // 현재 프로토콜에 맞는 WebSocket 프로토콜 설정 (http: -> ws:, https: -> wss:)
   const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
