@@ -1,3 +1,5 @@
+#외부접속시 방화벽 설정
+
 #node 설치
 ```
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
@@ -11,13 +13,19 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
 npm install
 ```
 
-#node 실행
+#node 실행(백그라운드드)
 ```
 npm run dev:windows
 npm run dev:mac
 
-```
+#종료 
+windows - 
+1. netstat -ano | findstr :5858 
+2. taskkill /PID {pid} /F
 
+mac - lsof -i :5858
+        - kill -9 {pid}
+```
 - Local URL: http://localhost:5858 -내부접속 url
 - External URL: http://192.168.0.4:5858 -외부접속 url
 
