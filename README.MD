@@ -16,7 +16,7 @@ brew install ngrok
 ```
 ### 2. ngok 가입큰 및 토큰 발급
 
-### 3. ngrok 토근 설정
+### 3. ngrok 토큰 설정
 ngrok authtoken <토근>
 
 ### 4. ngrok 실행
